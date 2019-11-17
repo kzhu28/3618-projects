@@ -1,0 +1,63 @@
+---
+title: "3618 project turn-in 2"
+author: "Jason Zhu" "Frank Wu"
+date: "11/16/2019"
+output: html_document
+---
+
+# Set the following values in your workspace: n = 10;L = 200000; i = 0.03
+```{r}
+n <- 10
+L <- 200000
+i <- 0.03
+```
+
+# Treat i as an annual effective rate, and convert it to a monthly effective rate with a
+descriptive name like monthly_rate. Make sure that your code will still work if you are
+given a different annual effective rate to start!
+```{r}
+monthly_rate <- (1+i)^(1/12) - 1
+monthly_rate
+```
+
+# Calculate the number of payment period.
+```{r}
+Number <- n*12
+Number
+```
+
+# Calculate the payment size of your amortizing loan and give it a descriptive name like
+payment_size.
+```{r}
+payment_size <- L / ( (1 - 1 / (1 + monthly_rate) ^ Number) / monthly_rate)
+payment_size
+```
+
+# Create a row vector (0, 0, L) to begin your amortization table and give it a descriptive
+name like amortization_table.
+```{r}
+amortization_table <-  matrix(c(0,0,L),nrow=1,ncol=3)
+amortization_table
+```
+
+# Write a loop that takes the last entry of the last row of your amortization table and uses it, along with your monthly effective rate and payment size, to create the next row of your table in the format (interest paid, principal repaid, outstanding balance). This new row should be appended to the bottom of your table.
+```{r}
+for (time in 1:Number) {
+  interest_paid <- amortization_table[ time, 3 ] * monthly_rate
+  principal_repaid <- payment_size - interest_paid
+  outstanding_balance <- amortization_table[ time , 3] - principal_repaid
+  amortization_table <- rbind(amortization_table, c(interest_paid, principal_repaid, outstanding_balance))
+}
+```
+
+# After the loop is done, label the rows and columns of the matrix appropriately.
+```{r}
+colnames(amortization_table) <- c("interest_paid","principal_repaid","outstanding_balance")
+rownames(amortization_table) <- c(0,1:Number)
+```
+
+# Show the amortization_table
+```{r}
+amortization_table
+```
+
