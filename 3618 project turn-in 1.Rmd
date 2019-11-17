@@ -1,0 +1,15 @@
+---
+title: "3618 projects turn-in 1"
+author: "Jason Zhu"
+date: "11/16/2019"
+output: html_document
+---
+
+```{r}
+rownames <- c("Vampire", "Zombie")
+colnames <- c("Taffy", "Chocolate", "Lollipop", "Bubble Gum", "Candy Stick", "Gummy")
+dim <- list(rownames,colnames)
+Halloween <- matrix(c(1:12), nrow=2, ncol=6, dimnames = dim)
+Halloween
+```
+
