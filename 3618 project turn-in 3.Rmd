@@ -1,0 +1,67 @@
+---
+title: "3618 project turn-in 3"
+author: "Jason Zhu" "Frank Wu"
+date: "12/1/2019"
+output: html_document
+---
+
+# Set the following values in your workspace: n = 10;C = 10000; r = 0:06; i = 0:04
+```{r}
+n <- 10
+C <- 10000
+r <- 0.06
+i <- 0.04
+```
+
+# Treat i as a nominal annual rate, convertible semiannually, treat r as the annual coupon rate, treat n as the number of years until redemption for your bond, and treat C as both the par and redemption value for your bond. Make sure that your script will still work if these values are changed!
+```{r}
+yield_rate <- i/2
+yield_rate
+coupon_rate <- r/2
+coupon_rate
+```
+
+# Calculate the coupon size of your bond and give it a descriptive name like coupon_size.
+```{r}
+coupon_size <- C*coupon_rate
+coupon_size
+```
+
+# Calculate the number of coupons.
+```{r}
+Number <- n*2
+Number
+```
+
+# Calculate the present value of the bond.
+```{r}
+P <- coupon_size*( 1 - 1/(1+yield_rate)^Number )/yield_rate + C*( 1 / (1+yield_rate)^Number )
+P
+```
+
+# Create a row vector (0, 0, P) to begin your amortization table and give it a descriptive name like amortization_table.
+```{r}
+amortization_table <-  matrix(c(0,0,P),nrow=1,ncol=3)
+amortization_table
+```
+
+# Write a loop that takes the last entry of the last row of your amortization table and uses it, along with your yield rate and coupon size, to create the next row of your table in the format (book value, interest paid, principal repaid). This new row should be appended to the bottom of your table.
+```{r}
+for (time in 1:Number) {
+  interest_paid <- amortization_table[ time, 3 ] * yield_rate
+  principal_repaid <- coupon_size - interest_paid
+  book_value <- amortization_table[ time , 3] - principal_repaid
+  amortization_table <- rbind(amortization_table, c(interest_paid, principal_repaid, book_value))
+}
+```
+
+# After the loop is done, label the rows and columns of the matrix appropriately.
+```{r}
+colnames(amortization_table) <- c("interest_paid", "principal_repaid", "book_value")
+rownames(amortization_table) <- c(0,1:Number)
+```
+
+# Show the amortization_table
+```{r}
+amortization_table
+```
